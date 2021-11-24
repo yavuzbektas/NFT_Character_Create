@@ -2,11 +2,15 @@ import os as os
 from os import path
 import glob as glob
 import shutil,random
-from PIL import Image
-import imageio,math
-import pandas as pd
-import numpy as np
-import json
+import json,math
+from PIL import Image # Bu kütüphane kurulmalıdır - pip install Pillow
+import imageio # Bu kütüphane kurulmalıdır -pip install imageio
+import pandas as pd # Bu kütüphane kurulmalıdır - pip install pandas
+import numpy as np # Bu kütüphane kurulmalıdır -pip install numpy
+
+##################################################################
+#  karakterinizin katmanlarının tanımlandığı kısımdır
+
 layersOrder = [
     { "name": 'arkaplan', "population": 100 },
     { "name": 'halk', "population": 100 },
@@ -16,26 +20,36 @@ layersOrder = [
     { "name": 'caphair', "population": 80 },  
     { "name": 'mouth', "population": 100 },  
 ]
-  
+##################################################################  
+#  karakterinizin resim ölçülerinin tanımlandığı kısım
 formatSize = {
     "width": 100,
     "height": 100
 }
-
+##################################################################  
+#  karakterinizin katmanlarının yani özelliklerinin enderlik ayarlarının yapıldığı kısım
 rarity = [
     { "key":"", "val": "orginal" ,"per":1},
     { "key": "_r", "val": "rare" ,"per":0.2},
     { "key": "_sr", "val": "super rare","per":0.1 },
 ]
-
+##################################################################  
+#  karakterinizin sayısı
 numberCharacter = 10
+
+##################################################################  
+#dosya yollarının ayarlandığı kısım
 ourPath = os.getcwd()
-print(ourPath)
-buildDir = ourPath + "\\python_nft\\build\\"
+
+buildDir = ourPath + "\\build\\"
 metDataFile = "_metadata.json"
-layersDir = ourPath + "\\python_nft\\layers\\"
+layersDir = ourPath + "\\layers\\"
+print(ourPath)
+print(buildDir)
+print(layersDir)
 
-
+##################################################################  
+# Ana program
 class NftImage():
     def __init__(self):
         self.metadata = []
@@ -174,9 +188,7 @@ class NftImage():
             allSeries.append(pd.Series(test[i]))
         
         dataFrame=pd.concat(allSeries, axis=1,names=CharacterNameList)
-        print(len(dataFrame))
         dataFrame=dataFrame.drop_duplicates()
-        print(len(dataFrame))
         #dataFrame=dataFrame.replace(np.nan, 0)
         dataFrame=dataFrame.replace(np.nan, -1)
         
@@ -221,6 +233,7 @@ if __name__ == "__main__":
     test = nft.drawLayer(layerList)
     nft.removeAllfiles(buildDir=buildDir)
     finalList = nft.mergeList(test)
+
 
 
 
